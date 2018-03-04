@@ -23,9 +23,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+if ( !defined( 'BKGGEO_DIR' ) ) {
+    define( 'BKGGEO_DIR', plugin_dir_path( __FILE__ ) );
+}
+
+if ( !defined( 'BKGGEO_URL' ) ) {
+    define( 'BKGGEO_URL', plugins_url( '/', __FILE__ ) );
+}
+
+if ( !defined( 'BKGGEO_INC' ) ) {
+    define( 'BKGGEO_INC', BKGGEO_DIR . 'inc/' );
+}
+
 // Include the main class.
 if ( ! class_exists( 'BackgroundGeo' ) ) {
 
+	include_once dirname( __FILE__ ) . '/model/Location.php';
 	include_once dirname( __FILE__ ) . '/inc/class-background-geo.php';
 	
 	$backgroundGeo = new BackgroundGeo();

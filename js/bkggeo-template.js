@@ -27,8 +27,7 @@
 			startOnBoot: true,
 			heartbeatInterval: 3,
 			// HTTP / SQLite config
-			// last: 1520084487
-			url: "https://matt.thiessen.us/wp-json/background-geo/v1/location",
+			url: "[[location_url]]",
 			method: "POST",
 			autoSync: true,
 			maxDaysToPersist: 3,
@@ -36,12 +35,12 @@
 				"X-FOO": "bar"
 			},
 			params: {   // <-- Optional HTTP params
-				"auth_token": "nope"
+				"device_id": (device && device.uuid) ? device.uuid : '',
 			},
 			// Logging and Debug
 			debug: true,  // <-- Debug sounds & notifications.
-			logLevel: bgGeo.LOG_LEVEL_VERBOSE,
-			logMaxDays: 3 // <-- 3 days of logs
+			logLevel: bkgGeo.plugin.LOG_LEVEL_VERBOSE,
+			logMaxDays: 1 // <-- 3 days of logs
 		}, function(state) {
 			// This callback is executed when the plugin is ready to use.
 			console.log("BackgroundGeolocation ready: ", state);
