@@ -38,8 +38,15 @@ if ( !defined( 'BKGGEO_INC' ) ) {
 // Include the main class.
 if ( ! class_exists( 'BackgroundGeo' ) ) {
 
+	include_once dirname( __FILE__ ) . '/inc/template-parts.php';
 	include_once dirname( __FILE__ ) . '/model/Location.php';
 	include_once dirname( __FILE__ ) . '/inc/class-background-geo.php';
+	include_once dirname( __FILE__ ) . '/inc/class-map.php';
+	include_once dirname( __FILE__ ) . '/inc/class-settings.php';
+
+	if( is_admin() ) {
+		include_once dirname( __FILE__ ) . '/inc/class-admin.php';
+	}
 	
 	$backgroundGeo = new BackgroundGeo();
 	$backgroundGeo->hooks();

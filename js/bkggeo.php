@@ -49,9 +49,19 @@
 		$js = file_get_contents('bkggeo-template.js');
 
 		$backgroundGeo = new BackgroundGeo();
+		$settings = new BKGGEO\Settings();
 		
 		$options = array(
 			'[[location_url]]' => $backgroundGeo->get_api_url(),
+			'[[desiredAccuracy]]' => $settings->get('bkgeo-accuracy'),
+			'[[distance-filter]]' => $settings->get('bkgeo-distance-filter'),
+			'[[recognition-interval]]' => $settings->get( 'bkgeo-recognition-interval' ),
+			'[[stop-timeout]]' => $settings->get( 'bkgeo-stop-timeout' ),
+			'[[stop-on-terminate]]' => $settings->get( 'bkgeo-stop-on-terminate' ),
+			'[[start-on-boot]]' => $settings->get( 'bkgeo-start-on-boot' ),
+			'[[heartbeat-interval]]' => $settings->get( 'bkgeo-heartbeat-interval' ),
+			'[[autosync]]' => $settings->get( 'bkgeo-autosync' ),
+			
 		);
     
 	    header('Content-Type: application/javascript');

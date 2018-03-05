@@ -17,19 +17,19 @@
 	bkgGeo.config = function() {
 		bkgGeo.plugin.configure({
 			// Geolocation config
-			desiredAccuracy: 0,
-			distanceFilter: 10,
+			desiredAccuracy: [[desiredAccuracy]],
+			distanceFilter: [[distance-filter]],
 			// Activity Recognition config
-			activityRecognitionInterval: 10000,
-			stopTimeout: 5,
+			activityRecognitionInterval: [[recognition-interval]],
+			stopTimeout: [[stop-timeout]],
 			// Application config        
-			stopOnTerminate: false,
-			startOnBoot: true,
-			heartbeatInterval: 3,
+			stopOnTerminate: [[stop-on-terminate]],
+			startOnBoot: [[start-on-boot]],
+			heartbeatInterval: [[heartbeat-interval]],
 			// HTTP / SQLite config
 			url: "[[location_url]]",
 			method: "POST",
-			autoSync: true,
+			autoSync: [[autosync]],
 			maxDaysToPersist: 3,
 			headers: {  // <-- Optional HTTP headers
 				"X-FOO": "bar"
@@ -38,7 +38,7 @@
 				"device_id": (device && device.uuid) ? device.uuid : '',
 			},
 			// Logging and Debug
-			debug: true,  // <-- Debug sounds & notifications.
+			debug: false,  // <-- Debug sounds & notifications.
 			logLevel: bkgGeo.plugin.LOG_LEVEL_VERBOSE,
 			logMaxDays: 1 // <-- 3 days of logs
 		}, function(state) {
