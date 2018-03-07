@@ -10,6 +10,7 @@ class Admin {
 
 	public function admin_init() {
 		add_submenu_page( 'apppresser_settings', 'Background Geo', 'Background Geo', 'manage_options', 'bkggeo-settings', array($this, 'setting_page') );
+		add_submenu_page( 'apppresser_settings', 'Bkg Geo Data', 'Background Geo Data', 'manage_options', 'bkggeo-data', array($this, 'geo_data_page') );
 	}
 
 	public function setting_page() {
@@ -24,6 +25,10 @@ class Admin {
 			update_option('bkgeo-heartbeat-interval', (int)$_POST['bkgeo-heartbeat-interval']);
 			update_option('bkgeo-autosync', $_POST['bkgeo-autosync']);
 			update_option('bkgeo-gmap-key', $_POST['bkgeo-gmap-key']);
+			update_option('bkgeo-debug', $_POST['bkgeo-debug']);
+			update_option('bkgeo-disabled', $_POST['bkgeo-disabled']);
+			update_option('bkgeo-starting-lat', $_POST['bkgeo-starting-lat']);
+			update_option('bkgeo-starting-lng', $_POST['bkgeo-starting-lng']);
 		}
 
 		$bkgeo_accuracy = get_option('bkgeo-accuracy');
@@ -35,6 +40,10 @@ class Admin {
 		$heartbeat_interval = get_option('bkgeo-heartbeat-interval');
 		$autosync = get_option('bkgeo-autosync');
 		$bkgeo_gmap_key = get_option('bkgeo-gmap-key');
+		$debug = get_option('bkgeo-debug');
+		$bkggeo_disabled = get_option('bkgeo-disabled');
+		$starting_lat = get_option('bkgeo-starting-lat');
+		$starting_lng = get_option('bkgeo-starting-lng');
 		
 
 		?>
@@ -42,9 +51,15 @@ class Admin {
 			<div class="wrap bkgeo_settings">
 			<h2>Background Geolocation Settings</h2>
 
-			<b>Note:</b> A user must open their app before new settings are used.
-			<hr>
+			<p><b>Note:</b> A user must open their app before new settings are used.</p>
 			
+			<label for="bkgeo-disabled">
+				<input type="checkbox" name="bkgeo-disabled" value="1" <?php checked( '1', $bkggeo_disabled ) ?>> <b>Disable:</b> Stop collecting locations
+			</label>
+			<p>&nbsp;</p>
+			
+			<hr>
+
 			<h4>Geolocation config</h4>
 			<label for="bkgeo-accuracy">
 				Accuracy
@@ -68,7 +83,7 @@ class Admin {
 			<h4>Activity Recognition config</h4>
 
 			<label for="bkgeo-recognition-interval">
-				<input type="text" name="bkgeo-recognition-interval" value="<?php echo $recognition_interval ?>"> Default: 10000 milliseconds<br>
+				<input type="text" name="bkgeo-recognition-interval" value="<?php echo $recognition_interval ?>"> Milliseconds (Default: 10000 milliseconds)<br>
 				<p>The desired time between activity detections. Larger values will result in fewer activity detections while improving battery life. A value of 0 will result in activity detections at the fastest possible rate.</p>
 			</label>
 
@@ -90,6 +105,13 @@ class Admin {
 				<input type="text" name="bkgeo-heartbeat-interval" value="<?php echo $heartbeat_interval ?>"> Heartbeat interval (seconds)
 				<p>Rate in <b>seconds</b> to fire heartbeat events.</p>
 			</label>
+			<label for="bkgeo-starting-lat">
+				<input type="text" name="bkgeo-starting-lat" value="<?php echo $starting_lat ?>"> Starting latitude
+			</label><br>
+			<label for="bkgeo-starting-lng">
+				<input type="text" name="bkgeo-starting-lng" value="<?php echo $starting_lng ?>"> Starting longitude
+			</label>
+			
 			<h4>HTTP / SQLite config</h4>
 			<label for="bkgeo-autosync">
 				<input type="checkbox" name="bkgeo-autosync" value="1" <?php checked( '1', $autosync ) ?>> Auto sync
@@ -98,6 +120,12 @@ class Admin {
 			<h4>Google Map API</h4>
 			<label for="bkgeo-gmap-key">
 				<input type="text" name="bkgeo-gmap-key" value="<?php echo $bkgeo_gmap_key ?>"> Key
+			</label>
+
+			<h4>Development</h4>
+			<label for="bkgeo-debug">
+				<input type="checkbox" name="bkgeo-debug" value="1" <?php checked( '1', $debug ) ?>> Debug
+				<p>Some helpful beeps and tones that get annoying after a while. Use only during development.</p>
 			</label>
 			<p><input type="submit" class="button-primary" value="Save Settings"></p>
 		</form>
@@ -131,6 +159,71 @@ class Admin {
 		</select>
 		<?php
 	}
+
+	public function geo_data_page() {
+
+		if( isset( $_POST['confirmed-delete'] ) && $_POST['confirmed-delete'] == 'true' ) {
+			$data_deleted = $this->delete_all_data();
+		}
+
+		?>
+
+		<form id="geo-data-delete-form" action="<?php echo esc_url( admin_url( 'admin.php?page=bkggeo-data' ) ); ?>" method="post" dir="ltr">
+
+			<div class="wrap bkgeo_data">
+			<h2>Background Geolocation Data</h2>
+
+			<!-- <p><b>Note:</b></p> -->
+
+			<?php if( $data_deleted ) : ?>
+				<div class="error notice">
+					<p>The background geo data has been deleted.</p>
+			    </div>
+			<?php endif; ?>
+
+			<p><b>Entries:</b> <?php echo  $this->count_all_rows() ?></p>
+			<input type="hidden" name="confirmed-delete" value="true">
+			
+			<?php //submit_button( 'Delete All Data', 'delete' ); ?>
+			<input type="submit" class="button delete" value="Delete All Data">
+
+			</div>
+			<script type="text/javascript">
+				jQuery('#geo-data-delete-form .delete').on('click', function(event) {
+					event.preventDefault();
+					var r = confirm("Are you sure you want to delete all the data you have collected?");
+					if (r == true) {
+						jQuery('#geo-data-delete-form').submit();
+					}
+				})
+			</script>
+		</form>
+
+
+		<?php
+	}
+
+	public function count_all_rows() {
+		global $wpdb;
+
+		$sql = "SELECT count(*) as count FROM {$wpdb->prefix}bkg_geo WHERE 1";
+
+		$row = $wpdb->get_row( $sql );
+
+		return $row->count;
+	}
+
+	private function delete_all_data() {
+
+		global $wpdb;
+
+		$sql = "DELETE FROM {$wpdb->prefix}bkg_geo WHERE 1";
+
+		$wpdb->query( $sql );
+
+		return true;
+	}
+
 }
 
 $admin = new Admin();

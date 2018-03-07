@@ -69,6 +69,9 @@ class BackgroundGeo {
 
 	public function post_location( $data ) {
 
+		if( get_option( 'bkggeo-disabled' ) )
+			wp_send_json_success( array( 'time' => time(), 'location'=>'disabled' ) );
+
 		$time = time();
 		$success = false;
 

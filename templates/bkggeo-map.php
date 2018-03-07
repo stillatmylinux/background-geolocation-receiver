@@ -82,11 +82,11 @@ bkggeo.drawMarkers = function() {
 bkggeo.configureMap = function() {
     /**
     * Configure Google Maps
-	* https://github.com/transistorsoft/cordova-background-geolocation-SampleApp/blob/master/src/pages/simple-map/simple-map.ts
+	  * https://github.com/transistorsoft/cordova-background-geolocation-SampleApp/blob/master/src/pages/simple-map/simple-map.ts
     */
 	bkggeo.locationMarkers = [];
     
-    let latLng = new google.maps.LatLng(41.97831, -91.5671812);
+    let latLng = new google.maps.LatLng(<?php echo $settings->get( 'bkgeo-starting-lat' ) ?>, <?php echo $settings->get( 'bkgeo-starting-lng' ) ?>);
 
     let mapOptions = {
       center: latLng,

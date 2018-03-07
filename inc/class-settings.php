@@ -19,6 +19,12 @@ class Settings {
 			$this->fields['bkgeo-heartbeat-interval'] = $this->validate( 'bkgeo-heartbeat-interval', array('integer') );
 			$this->fields['bkgeo-autosync'] = $this->validate( 'bkgeo-autosync', array('boolean') );
 			$this->fields['bkgeo-gmap-key'] = $this->validate( 'bkgeo-gmap-key' );
+			$this->fields['bkgeo-starting-lat'] = $this->validate( 'bkgeo-starting-lat' );
+			$this->fields['bkgeo-starting-lng'] = $this->validate( 'bkgeo-starting-lng' );
+			$this->fields['bkgeo-debug'] = $this->validate( 'bkgeo-debug', array('boolean') );
+			$this->fields['bkgeo-disable'] = $this->validate( 'bkgeo-disable', array('boolean') );
+			$this->fields['bkgeo-starting-lat'] = $this->validate( 'bkgeo-starting-lat' );
+			$this->fields['bkgeo-starting-lng'] = $this->validate( 'bkgeo-starting-lng' );
 		}
 
 		return $this->fields[$field];

@@ -40,7 +40,10 @@
     $www_root = find_parent_wp_root($path = './');
     
     if( ! $www_root ) {
-	    http_response_code(404);
+		header('Content-Type: application/javascript');
+		header('HTTP/1.1 200 OK');
+		$js = file_get_contents('bkggeo-heartbeat.js');
+		echo $js;
     } else {
 	
 		define('WP_USE_THEMES', false);
@@ -61,10 +64,11 @@
 			'[[start-on-boot]]' => $settings->get( 'bkgeo-start-on-boot' ),
 			'[[heartbeat-interval]]' => $settings->get( 'bkgeo-heartbeat-interval' ),
 			'[[autosync]]' => $settings->get( 'bkgeo-autosync' ),
-			
+			'[[bkgeo-debug]]' => $settings->get( 'bkgeo-debug' ),
 		);
     
-	    header('Content-Type: application/javascript');
+		header('Content-Type: application/javascript');
+		header('HTTP/1.1 200 OK');
 	    echo replace_settings($js, $options);
     }
     

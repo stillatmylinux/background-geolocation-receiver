@@ -38,7 +38,7 @@
 				"device_id": (device && device.uuid) ? device.uuid : '',
 			},
 			// Logging and Debug
-			debug: false,  // <-- Debug sounds & notifications.
+			debug: [[bkgeo-debug]],  // <-- Debug sounds & notifications.
 			logLevel: bkgGeo.plugin.LOG_LEVEL_VERBOSE,
 			logMaxDays: 1 // <-- 3 days of logs
 		}, function(state) {
