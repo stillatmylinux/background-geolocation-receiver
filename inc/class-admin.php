@@ -10,7 +10,8 @@ class Admin {
 
 	public function admin_init() {
 		add_submenu_page( 'apppresser_settings', 'Background Geo', 'Background Geo', 'manage_options', 'bkggeo-settings', array($this, 'setting_page') );
-		add_submenu_page( 'apppresser_settings', 'Bkg Geo Data', 'Background Geo Data', 'manage_options', 'bkggeo-data', array($this, 'geo_data_page') );
+		add_menu_page( 'Bkg Geo Data', 'Background Geo Data', 'manage_options', 'bkggeo-data', array($this, 'geo_data_page') );
+		remove_menu_page( 'bkggeo-data' ); // hidden page: admin.php?page=bkggeo-data
 	}
 
 	public function setting_page() {
@@ -52,11 +53,12 @@ class Admin {
 			<h2>Background Geolocation Settings</h2>
 
 			<p><b>Note:</b> A user must open their app before new settings are used.</p>
+
 			
 			<label for="bkgeo-disabled">
 				<input type="checkbox" name="bkgeo-disabled" value="1" <?php checked( '1', $bkggeo_disabled ) ?>> <b>Disable:</b> Stop collecting locations
 			</label>
-			<p>&nbsp;</p>
+			<p><a href="admin.php?page=bkggeo-data">Geo Data</a> (where you go to delete data)</p>
 			
 			<hr>
 
@@ -185,7 +187,7 @@ class Admin {
 			<input type="hidden" name="confirmed-delete" value="true">
 			
 			<?php //submit_button( 'Delete All Data', 'delete' ); ?>
-			<input type="submit" class="button delete" value="Delete All Data">
+			<input type="submit" class="button delete" value="Delete All Geo Data"> <b>Warning!</b> Unreversable, create a backup of your database first.
 
 			</div>
 			<script type="text/javascript">
