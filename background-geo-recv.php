@@ -3,7 +3,7 @@
  * Plugin Name: Background Geolocation Receiver
  * Plugin URI: https://stillatmylinux.com/
  * Description: A server-side receiver of the location data from the cordova-background-geolocation cordova plugin
- * Version: 0.0.1
+ * Version: 0.2.0
  * Author: Stillatmylinux
  * Author URI: https://stillatmylinux.com
  * Requires at least: 4.4

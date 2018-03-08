@@ -136,7 +136,8 @@ class Admin {
 
 		<h3>Shortcodes</h3>
 			<p>[bkggeo-debug]</p>
-			<p>[bkggeo-map]</p>
+			<p>[bkggeo-clusters]</p>
+			<p>[bkggeo-trails]</p>
 		<?php
 	}
 
@@ -187,7 +188,7 @@ class Admin {
 			<input type="hidden" name="confirmed-delete" value="true">
 			
 			<?php //submit_button( 'Delete All Data', 'delete' ); ?>
-			<input type="submit" class="button delete" value="Delete All Geo Data"> <b>Warning!</b> Unreversable, create a backup of your database first.
+			<input type="submit" class="button delete" value="Delete All Geo Data"> <b>Warning!</b> Irreversible, create a backup of your database first.
 
 			</div>
 			<script type="text/javascript">
